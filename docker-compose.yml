@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  zookeeper:
+    image: zookeeper:3.4
+    container_name: zookeeper
+    hostname: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  kafka:
+    image : confluentinc/cp-kafka
+    hostname: kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      # KAFKA_CREATE_TOPICS: "metadata_notification"
+      # KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://127.0.0.1:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      # KAFKA_ADVERTISED_HOST_NAME: 10.75.143.51
+    depends_on:
+      - zookeeper
